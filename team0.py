@@ -7,8 +7,8 @@
 ####
 
 team_name = 'TyZ' # Only 10 chars displayed.
-strategy_name = 'Copykat'
-strategy_description = 'Collude, then copy the last move made by the opponent'
+strategy_name = 'Copykat 2.0'
+strategy_description = 'Collude, then copy the last move made by the opponent. If going against alternate, destroy them.'
     
 def move(my_history, their_history, my_score, their_score):
     ''' Arguments accepted: my_history, their_history are strings.
@@ -24,13 +24,20 @@ def move(my_history, their_history, my_score, their_score):
     
     # Analyze my_history and their_history and/or my_score and their_score.
     # Decide whether to return 'c' or 'b'.
+    altmode = 0
+    if len(their_history) > 4:
+        if their_history[1] == 'c' and their_history[2] == 'b' and their_history[3] == 'c' and their_history[4] == 'b':
+            return 'b'
+            altmode = 1
+        if their_history[1] == 'b' and their_history[2] == 'c' and their_history[3] == 'b' and their_history[4] == 'c':
+            return 'b'
+            altmode = 1
     if my_history == '':
         return 'c'
-    elif their_history[-1] == 'c':
+    elif their_history[-1] == 'c' and altmode == 0:
         return 'c'
-    elif their_history[-1] == 'b':
+    elif their_history[-1] == 'b' and altmode == 0:
         return 'b'
-
     
 def test_move(my_history, their_history, my_score, their_score, result):
     '''calls move(my_history, their_history, my_score, their_score)
